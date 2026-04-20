@@ -1,0 +1,857 @@
+.dashboard-page {
+  min-height: calc(100vh - 4rem);
+  padding: 20px;
+  background:
+    radial-gradient(circle at top left, rgba(130, 212, 226, 0.16), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(255, 171, 92, 0.18), transparent 24%),
+    linear-gradient(180deg, #f7efe6 0%, #f2e7da 100%);
+}
+
+.dashboard-board {
+  min-height: calc(100vh - 7rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  background: rgba(255, 252, 248, 0.98);
+  border-radius: 34px;
+  box-shadow: 0 24px 60px rgba(99, 69, 37, 0.12);
+  overflow: hidden;
+}
+
+.dashboard-main-panel,
+.dashboard-calendar-rail {
+  padding: 36px 34px;
+}
+
+.dashboard-main-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.dashboard-main-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dashboard-main-top h1,
+.dashboard-section h2,
+.dashboard-calendar-top h2,
+.dashboard-task-modal h2 {
+  margin: 0;
+  color: #2f2140;
+  font-weight: 800;
+}
+
+.dashboard-main-top h1 {
+  font-size: 2.25rem;
+  margin-bottom: 8px;
+}
+
+.dashboard-main-top p,
+.dashboard-task-copy p,
+.dashboard-stat-card span,
+.dashboard-plan-copy p,
+.dashboard-calendar-day-header span,
+.dashboard-calendar-summary span,
+.dashboard-empty-card p,
+.dashboard-task-modal label span {
+  margin: 0;
+  color: #9f9aa8;
+}
+
+.dashboard-main-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-hidden-input {
+  display: none;
+}
+
+.dashboard-icon-button,
+.dashboard-primary-button,
+.dashboard-mini-action,
+.dashboard-task-icon,
+.dashboard-task-check,
+.dashboard-modal-secondary {
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dashboard-icon-button,
+.dashboard-mini-action,
+.dashboard-task-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f2f1;
+  color: #2f2140;
+  box-shadow: 0 8px 18px rgba(47, 33, 64, 0.06);
+}
+
+.dashboard-icon-button.light {
+  background: #fff;
+}
+
+.dashboard-primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: #171528;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 14px 28px rgba(23, 21, 40, 0.16);
+}
+
+.dashboard-primary-button:hover,
+.dashboard-icon-button:hover,
+.dashboard-mini-action:hover,
+.dashboard-task-icon:hover,
+.dashboard-modal-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.dashboard-project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.dashboard-project-card {
+  min-height: 200px;
+  border-radius: 22px;
+  padding: 22px;
+  color: #fff;
+  box-shadow: 0 22px 36px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.dashboard-project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 40px rgba(104, 73, 43, 0.22);
+}
+
+.dashboard-project-card.purple {
+  background: linear-gradient(180deg, #7b3c8c, #6c347d);
+}
+
+.dashboard-project-card.cyan {
+  background: linear-gradient(180deg, #93d6dc, #8acfd5);
+}
+
+.dashboard-project-card.orange {
+  background: linear-gradient(180deg, #ff8554, #ff7a4d);
+}
+
+.dashboard-project-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-project-count {
+  min-width: 56px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1b1930;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.dashboard-project-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-project-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.dashboard-project-card h3 {
+  margin: 36px 0 18px;
+  max-width: 10ch;
+  font-size: 1.85rem;
+  line-height: 1.05;
+  font-weight: 800;
+  color: inherit;
+}
+
+.dashboard-project-card p {
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.dashboard-project-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.dashboard-project-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dashboard-lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.95fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.dashboard-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.dashboard-section h2 {
+  font-size: 1.9rem;
+}
+
+.dashboard-mini-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #532563;
+  color: #fff;
+  box-shadow: 0 12px 20px rgba(83, 37, 99, 0.16);
+}
+
+.dashboard-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dashboard-task-surface {
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 34px rgba(73, 45, 91, 0.08);
+  transition: all 0.3s ease;
+}
+
+.dashboard-task-surface:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-task-toggle {
+  border-color: #ece5f0;
+  background: transparent;
+  color: transparent;
+}
+
+.dashboard-task-surface:hover .dashboard-task-toggle {
+  border-color: #532563;
+}
+
+.dashboard-task-toggle.done {
+  border-color: #532563;
+  background: #532563;
+  color: #fff;
+}
+
+.dashboard-task-title {
+  color: #332245;
+}
+
+.dashboard-task-description {
+  color: #9f9aa8;
+}
+
+.dashboard-task-date-meta {
+  color: #8f889a;
+}
+
+.dashboard-task-action-button {
+  background: #f7f2f1;
+  color: #6a6078;
+}
+
+.dashboard-task-action-button:hover {
+  color: #532563;
+}
+
+.dashboard-task-action-button.danger {
+  color: #d66363;
+}
+
+.dashboard-task-action-button.danger:hover {
+  color: #c94a4a;
+}
+
+.dashboard-task-card {
+  display: grid;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  align-items: center;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 18px 34px rgba(73, 45, 91, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.dashboard-task-card:hover,
+.dashboard-stat-card:hover,
+.dashboard-plan-card:hover,
+.dashboard-empty-card:hover,
+.dashboard-module-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-task-accent {
+  align-self: stretch;
+}
+
+.dashboard-task-accent.orange {
+  background: #ff8a58;
+}
+
+.dashboard-task-accent.cyan {
+  background: #8ed8df;
+}
+
+.dashboard-task-copy {
+  padding: 20px 22px;
+}
+
+.dashboard-task-copy h3,
+.dashboard-plan-copy h3 {
+  margin: 0 0 10px;
+  color: #332245;
+}
+
+.dashboard-task-date {
+  display: inline-block;
+  margin-top: 10px;
+  color: #8f889a;
+  font-size: 0.85rem;
+}
+
+.dashboard-task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 18px;
+}
+
+.dashboard-task-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ece5f0;
+  background: transparent;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-task-check.done {
+  background: #532563;
+  border-color: #532563;
+}
+
+.dashboard-task-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+.dashboard-task-icon.danger {
+  color: #d66363;
+}
+
+.dashboard-empty-card,
+.dashboard-stat-card,
+.dashboard-plan-card,
+.dashboard-module-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 18px 34px rgba(73, 45, 91, 0.08);
+  transition: all 0.3s ease;
+}
+
+.dashboard-empty-card {
+  padding: 24px;
+}
+
+.dashboard-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.dashboard-stat-card {
+  min-height: 118px;
+  padding: 22px;
+}
+
+.dashboard-stat-card strong {
+  display: block;
+  margin-bottom: 12px;
+  color: #2f2140;
+  font-size: 2rem;
+}
+
+.dashboard-plan-card {
+  grid-column: span 2;
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  align-items: end;
+  overflow: hidden;
+}
+
+.dashboard-plan-copy {
+  padding: 26px 24px;
+}
+
+.dashboard-plan-copy strong {
+  color: #5b236f;
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+.dashboard-plan-copy > span {
+  margin-left: 8px;
+  color: #392b4c;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.dashboard-plan-copy h3 {
+  margin-top: 20px;
+}
+
+.dashboard-plan-illustration {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 214, 154, 0.8), transparent 22%),
+    radial-gradient(circle at 72% 22%, rgba(137, 215, 221, 0.7), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 210, 161, 0.08));
+}
+
+.dashboard-plan-illustration span {
+  position: absolute;
+  bottom: 16px;
+  width: 52px;
+  border-radius: 22px 22px 12px 12px;
+  background: linear-gradient(180deg, #ff9d68, #ff8a58);
+}
+
+.dashboard-plan-illustration span:nth-child(1) {
+  left: 20px;
+  height: 76px;
+}
+
+.dashboard-plan-illustration span:nth-child(2) {
+  left: 74px;
+  height: 112px;
+  background: linear-gradient(180deg, #8ad5db, #67c8d0);
+}
+
+.dashboard-plan-illustration span:nth-child(3) {
+  left: 126px;
+  height: 92px;
+  background: linear-gradient(180deg, #8e4aa2, #6c347d);
+}
+
+.dashboard-module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.dashboard-module-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+}
+
+.dashboard-module-card h3 {
+  margin: 0 0 8px;
+  color: #332245;
+  font-size: 1.05rem;
+}
+
+.dashboard-module-card p {
+  margin: 0;
+  color: #8f889a;
+  line-height: 1.5;
+}
+
+.dashboard-module-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dashboard-module-card.cyan .dashboard-module-icon {
+  background: rgba(142, 216, 223, 0.22);
+  color: #4b97a0;
+}
+
+.dashboard-module-card.orange .dashboard-module-icon {
+  background: rgba(255, 138, 88, 0.2);
+  color: #ef6d38;
+}
+
+.dashboard-module-card.purple .dashboard-module-icon {
+  background: rgba(122, 63, 147, 0.14);
+  color: #6d3785;
+}
+
+.dashboard-calendar-rail {
+  background: rgba(255, 248, 241, 0.76);
+  border-left: 1px solid rgba(60, 39, 79, 0.08);
+}
+
+.dashboard-calendar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.dashboard-calendar-top .dashboard-calendar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-calendar-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+}
+
+.dashboard-calendar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-calendar-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.dashboard-calendar-day-header button {
+  border: none;
+  background: transparent;
+  color: #8f889a;
+  font-size: 1.2rem;
+}
+
+.dashboard-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(20, 13, 31, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dashboard-task-modal {
+  width: min(100%, 520px);
+  background: #fffaf6;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 24px 60px rgba(34, 18, 49, 0.2);
+}
+
+.dashboard-task-modal h2 {
+  margin-bottom: 22px;
+}
+
+.dashboard-task-modal label {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.dashboard-task-modal label span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #59426e;
+}
+
+.dashboard-task-modal input,
+.dashboard-task-modal textarea,
+.dashboard-task-modal select {
+  width: 100%;
+  border: 1px solid rgba(97, 74, 117, 0.16);
+  border-radius: 14px;
+  background: #fff;
+  color: #2f2140;
+}
+
+.dashboard-task-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.dashboard-modal-secondary {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #f2edf4;
+  color: #5e5368;
+  font-weight: 700;
+}
+
+html.dark .dashboard-page {
+  background:
+    radial-gradient(circle at top left, rgba(255, 122, 0, 0.16), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(76, 138, 255, 0.14), transparent 24%),
+    linear-gradient(180deg, #0d0d10 0%, #09090b 100%);
+}
+
+html.dark .dashboard-board {
+  background: rgba(17, 17, 20, 0.96);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+}
+
+html.dark .dashboard-main-top h1,
+html.dark .dashboard-section h2,
+html.dark .dashboard-calendar-top h2,
+html.dark .dashboard-task-modal h2,
+html.dark .dashboard-task-copy h3,
+html.dark .dashboard-plan-copy h3,
+html.dark .dashboard-module-card h3,
+html.dark .dashboard-main-top p,
+html.dark .dashboard-task-copy p,
+html.dark .dashboard-stat-card span,
+html.dark .dashboard-plan-copy p,
+html.dark .dashboard-calendar-day-header span,
+html.dark .dashboard-calendar-summary span,
+html.dark .dashboard-empty-card p,
+html.dark .dashboard-task-modal label span {
+  color: #f5f5f7;
+}
+
+html.dark .dashboard-main-top p,
+html.dark .dashboard-task-copy p,
+html.dark .dashboard-stat-card span,
+html.dark .dashboard-plan-copy p,
+html.dark .dashboard-calendar-day-header span,
+html.dark .dashboard-calendar-summary span,
+html.dark .dashboard-empty-card p,
+html.dark .dashboard-task-modal label span,
+html.dark .dashboard-task-date,
+html.dark .dashboard-module-card p,
+html.dark .dashboard-task-description,
+html.dark .dashboard-task-date-meta {
+  color: #9a9aa5;
+}
+
+html.dark .dashboard-icon-button,
+html.dark .dashboard-mini-action,
+html.dark .dashboard-task-icon,
+html.dark .dashboard-calendar-summary,
+html.dark .dashboard-modal-secondary,
+html.dark .dashboard-project-count,
+html.dark .dashboard-task-check,
+html.dark .dashboard-task-modal input,
+html.dark .dashboard-task-modal textarea,
+html.dark .dashboard-task-modal select {
+  background: #17171c;
+  color: #f5f5f7;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+
+html.dark .dashboard-primary-button {
+  background: #ff7a00;
+  color: #131313;
+  box-shadow: 0 14px 28px rgba(255, 122, 0, 0.24);
+}
+
+html.dark .dashboard-task-modal {
+  background: #121216;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.42);
+}
+
+html.dark .dashboard-project-card.purple {
+  background: linear-gradient(180deg, #5d2b6d, #472453);
+}
+
+html.dark .dashboard-project-card.cyan {
+  background: linear-gradient(180deg, #245c63, #1c4a50);
+}
+
+html.dark .dashboard-project-card.orange {
+  background: linear-gradient(180deg, #d9602d, #bc4f22);
+}
+
+html.dark .dashboard-empty-card,
+html.dark .dashboard-stat-card,
+html.dark .dashboard-plan-card,
+html.dark .dashboard-module-card,
+html.dark .dashboard-task-card,
+html.dark .dashboard-calendar-rail,
+html.dark .dashboard-task-list article,
+html.dark .dashboard-task-surface {
+  background: #141419;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
+}
+
+html.dark .dashboard-calendar-rail {
+  border-left-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .dashboard-stat-card strong,
+html.dark .dashboard-task-title {
+  color: #f5f5f7;
+}
+
+html.dark .dashboard-plan-copy strong,
+html.dark .dashboard-plan-copy > span {
+  color: #ffb36b;
+}
+
+html.dark .dashboard-task-icon.danger {
+  color: #ff8d8d;
+}
+
+html.dark .dashboard-task-toggle {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+html.dark .dashboard-task-surface:hover .dashboard-task-toggle {
+  border-color: #ffb36b;
+}
+
+html.dark .dashboard-task-toggle.done {
+  border-color: #ff7a00;
+  background: #ff7a00;
+  color: #111114;
+}
+
+html.dark .dashboard-task-action-button {
+  background: #1d1d24;
+  color: #d8d5df;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+html.dark .dashboard-task-action-button:hover {
+  color: #ffb36b;
+}
+
+html.dark .dashboard-task-action-button.danger {
+  color: #ff9c9c;
+}
+
+html.dark .dashboard-task-modal input,
+html.dark .dashboard-task-modal textarea,
+html.dark .dashboard-task-modal select {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 1280px) {
+  .dashboard-board {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-calendar-rail {
+    border-left: none;
+    border-top: 1px solid rgba(60, 39, 79, 0.08);
+  }
+}
+
+@media (max-width: 980px) {
+  .dashboard-project-grid,
+  .dashboard-lower-grid,
+  .dashboard-stat-grid,
+  .dashboard-module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-plan-card {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 12px;
+  }
+
+  .dashboard-main-panel,
+  .dashboard-calendar-rail {
+    padding: 22px 18px;
+  }
+
+  .dashboard-main-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-main-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dashboard-primary-button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .dashboard-project-card h3 {
+    max-width: none;
+  }
+
+  .dashboard-task-card {
+    grid-template-columns: 6px minmax(0, 1fr);
+  }
+
+  .dashboard-task-actions {
+    grid-column: 2;
+    padding: 0 18px 18px;
+    justify-content: flex-end;
+  }
+}

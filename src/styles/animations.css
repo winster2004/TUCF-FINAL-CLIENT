@@ -1,0 +1,424 @@
+.trial-floating-timer {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 0.7rem 1.05rem;
+  border: 1px solid #f97316;
+  border-radius: 999px;
+  background: #2a1a12;
+  color: #ffffff;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 800;
+}
+
+.trial-floating-timer.expired {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.trial-overlay,
+.trial-checkout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  animation: trialOverlayIn 200ms ease-in-out both;
+}
+
+.trial-activation-card,
+.trial-order-card,
+.trial-confirm-card {
+  border-radius: 12px;
+  background: #1a0f0a;
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  color: #ffffff;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+}
+
+.trial-activation-card {
+  position: relative;
+  width: min(100%, 480px);
+  overflow: hidden;
+  animation: trialModalIn 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.trial-activation-card.is-morphing {
+  animation: trialMorph 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trial-card-accent {
+  height: 6px;
+  background: linear-gradient(90deg, #f97316, #ffb067);
+}
+
+.trial-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.trial-activation-content,
+.trial-success-content {
+  padding: 2rem;
+}
+
+.trial-activation-content.is-fading {
+  animation: trialFadeOut 600ms ease-in-out both;
+}
+
+.trial-activation-content h2,
+.trial-success-content h2,
+.trial-order-card h2,
+.trial-confirm-card h2,
+.trial-final-success h2 {
+  margin: 0;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.trial-activation-content h2,
+.trial-success-content h2 {
+  font-size: clamp(1.9rem, 4vw, 2.45rem);
+}
+
+.trial-activation-content p,
+.trial-success-content p,
+.trial-confirm-card p,
+.trial-final-success p {
+  margin: 0.85rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+.trial-feature-list {
+  margin: 1.55rem 0 1.8rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.trial-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+  font-weight: 750;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: trialItemIn 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trial-feature-list span {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(249, 115, 22, 0.18);
+  color: #f97316;
+}
+
+.trial-primary-button {
+  min-height: 52px;
+  width: 100%;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: #f97316;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+  animation: trialPulse 1.5s infinite;
+}
+
+.trial-primary-button.is-loading {
+  transform: scale(0.97);
+  animation: none;
+}
+
+.trial-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  animation: trialSpin 800ms linear infinite;
+}
+
+.trial-success-content {
+  min-height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: trialSlideIn 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trial-success-content h2 {
+  color: #f97316;
+}
+
+.trial-check-svg {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 1rem;
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trial-check-svg.large {
+  width: 120px;
+  height: 120px;
+}
+
+.trial-check-svg circle,
+.trial-check-svg path {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: trialCheckDraw 500ms ease forwards;
+}
+
+.trial-check-svg path {
+  animation-delay: 260ms;
+}
+
+.trial-dots span {
+  animation: trialDot 900ms ease-in-out infinite;
+}
+
+.trial-dots span:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.trial-dots span:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+.trial-checkout-overlay {
+  align-items: stretch;
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: trialCheckoutSlide 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trial-checkout-overlay.is-success {
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.trial-checkout-shell {
+  width: min(1180px, 100%);
+  margin: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.8fr);
+  gap: 1.4rem;
+}
+
+.trial-order-card,
+.trial-confirm-card {
+  padding: clamp(1.3rem, 3vw, 2rem);
+}
+
+.trial-order-line,
+.trial-order-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  color: #ffffff;
+}
+
+.trial-order-line.muted {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.trial-order-divider {
+  height: 1px;
+  margin: 1.3rem 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.trial-order-total strong {
+  color: #f97316;
+  font-size: 1.4rem;
+}
+
+.trial-secure-text,
+.trial-starts-text {
+  margin: 1rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.trial-confirm-card label {
+  display: block;
+  margin: 1.4rem 0 1rem;
+}
+
+.trial-confirm-card label span {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 800;
+}
+
+.trial-confirm-card input {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  padding: 0 1rem;
+}
+
+.trial-avatars-row {
+  margin-top: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.trial-avatars-row span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316, #ffffff);
+  border: 2px solid #1a0f0a;
+  margin-left: -8px;
+}
+
+.trial-avatars-row span:first-child {
+  margin-left: 0;
+}
+
+.trial-avatars-row strong {
+  margin-left: 0.75rem;
+  color: #ffffff;
+}
+
+.trial-final-success {
+  width: min(720px, 100%);
+  margin: auto;
+  text-align: center;
+  color: #ffffff;
+  animation: trialSlideIn 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trial-final-success h2 {
+  margin-top: 1.3rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  animation: trialTextUp 420ms ease both;
+}
+
+.trial-progress-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.trial-progress-bar span {
+  display: block;
+  height: 100%;
+  background: #f97316;
+  animation: trialProgress 2000ms linear forwards;
+}
+
+@keyframes trialOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes trialModalIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes trialMorph {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.96); opacity: 0.75; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes trialFadeOut {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes trialItemIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes trialPulse {
+  0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+  100% { box-shadow: 0 0 0 14px rgba(249, 115, 22, 0); }
+}
+
+@keyframes trialSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes trialSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes trialCheckDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes trialDot {
+  0%, 100% { opacity: 0.25; }
+  45% { opacity: 1; }
+}
+
+@keyframes trialCheckoutSlide {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes trialTextUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes trialProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@media (max-width: 760px) {
+  .trial-checkout-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .trial-floating-timer {
+    top: 10px;
+    width: calc(100vw - 2rem);
+    text-align: center;
+  }
+}

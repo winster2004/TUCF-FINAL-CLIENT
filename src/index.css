@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--bg-main: #fffaf3;
+	--bg-card: #ffffff;
+	--bg-sidebar: #f7efe3;
+	--text-primary: #1f1727;
+	--text-secondary: #6f6778;
+	--accent: #ff7a00;
+	--accent-hover: #e56d00;
+	--border: rgba(85, 61, 37, 0.12);
+	--input-bg: #ffffff;
+	--body-bg: #fffaf3;
+}
+
+html.dark {
+	--bg-main: #0b0b0b;
+	--bg-card: #121212;
+	--bg-sidebar: #0a0a0a;
+	--text-primary: #ffffff;
+	--text-secondary: #9ca3af;
+	--accent: #ff7a00;
+	--accent-hover: #e56d00;
+	--border: #1f1f1f;
+	--input-bg: #0f0f0f;
+	--body-bg: #0b0b0b;
+}
+
+* {
+	box-sizing: border-box;
+	transition-property: color, background-color, border-color, box-shadow, transform, opacity, filter;
+	transition-duration: 0.2s;
+	transition-timing-function: ease;
+}
+
+html,
+body,
+#root {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--body-bg);
+	color: var(--text-primary);
+	font-family: Inter, system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 600;
+	color: var(--text-primary);
+}
+
+p,
+span,
+label,
+small {
+	color: var(--text-secondary);
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.brand-logo {
+	display: inline-flex;
+	flex-direction: column;
+	line-height: 0.92;
+}
+
+.brand-logo-wordmark {
+	display: inline-flex;
+	align-items: flex-end;
+	gap: 0.02em;
+	font-weight: 900;
+	letter-spacing: -0.075em;
+	text-transform: uppercase;
+	filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.22));
+}
+
+.brand-logo-md .brand-logo-wordmark {
+	font-size: 3rem;
+}
+
+.brand-logo-sm .brand-logo-wordmark {
+	font-size: 2.1rem;
+}
+
+.brand-logo-letter {
+	display: inline-block;
+	transform-origin: center bottom;
+	text-shadow:
+		0 1px 0 rgba(255, 255, 255, 0.08),
+		0 2px 0 rgba(0, 0, 0, 0.12),
+		0 10px 22px rgba(0, 0, 0, 0.2);
+}
+
+.brand-logo-letter-cool {
+	background: linear-gradient(180deg, #e0e5ef 0%, #c4cedd 48%, #98a5b8 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.brand-logo-letter-warm {
+	background: linear-gradient(180deg, #ffb068 0%, #ff8c39 54%, #bf6430 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.brand-logo-letter:nth-child(1) {
+	transform: translateY(-0.02em);
+}
+
+.brand-logo-letter:nth-child(2) {
+	transform: translateY(0.01em);
+}
+
+.brand-logo-letter:nth-child(3) {
+	transform: translateY(-0.015em);
+}
+
+.brand-logo-letter:nth-child(4) {
+	transform: translateY(0.015em);
+}
+
+.brand-logo-tagline {
+	margin-top: 0.18rem;
+	font-weight: 500;
+	letter-spacing: 0.015em;
+	white-space: nowrap;
+	color: var(--text-secondary);
+	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+}
+
+.brand-logo-md .brand-logo-tagline {
+	font-size: 0.84rem;
+}
+
+.brand-logo-sm .brand-logo-tagline {
+	font-size: 0.68rem;
+}
+
+input,
+textarea,
+select {
+	width: 100%;
+	background: var(--input-bg);
+	border: 1px solid var(--border);
+	color: var(--text-primary);
+	border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: #6b7280;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.2);
+}
+
+button {
+	border: 0;
+}
+
+.shadow-sm {
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+	box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg {
+	box-shadow: 0 2.5rem 5rem rgba(0, 0, 0, 0.15);
+}
+
+.feature-card {
+	background: #fff;
+	padding: 3rem;
+	border-radius: 14px;
+	transition: all 0.35s ease;
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.feature-card:hover {
+	transform: translateY(-8px) scale(1.02);
+	box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.1);
+}
+
+.icon-box {
+	background: #fdf2e9;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	transition: all 0.3s ease;
+}
+
+.feature-card:hover .icon-box {
+	background: #e67e22;
+	color: #fff;
+	transform: rotate(5deg) scale(1.1);
+}
+
+.image-hover {
+	overflow: hidden;
+	border-radius: 12px;
+}
+
+.image-hover img {
+	width: 100%;
+	transition: transform 0.4s ease;
+}
+
+.image-hover:hover img {
+	transform: scale(1.1);
+}
+
+.text-box {
+	transition: all 0.35s ease;
+}
+
+.text-box:hover {
+	transform: translateY(-6px);
+}
+
+.logos img {
+	filter: brightness(0);
+	opacity: 0.6;
+	transition: all 0.3s ease;
+}
+
+.logos img:hover {
+	filter: brightness(1);
+	opacity: 1;
+	transform: scale(1.1);
+}

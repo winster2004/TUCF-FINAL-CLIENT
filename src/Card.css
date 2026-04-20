@@ -1,0 +1,85 @@
+.tucf-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.35s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.tucf-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.1);
+}
+
+.tucf-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.tucf-btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.12);
+}
+
+.tucf-btn-primary,
+.tucf-btn-primary:link,
+.tucf-btn-primary:visited,
+.tucf-btn-primary:hover,
+.tucf-btn-primary:focus-visible {
+  color: #fff;
+}
+
+.tucf-btn-primary span,
+.tucf-btn-primary svg {
+  color: inherit;
+}
+
+.tucf-btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.tucf-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.tucf-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.tucf-btn-ghost:hover {
+  color: var(--text-primary);
+  border-color: var(--accent);
+  background: rgba(255, 122, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.tucf-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+html.dark .tucf-progress-track {
+  background: #1f2937;
+}
+
+.tucf-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff7a00, #ffa347);
+}

@@ -1,0 +1,224 @@
+.free-dashboard-board {
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.dashboard-tier-badge,
+.dashboard-locked-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(83, 37, 99, 0.1);
+  color: #532563;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.free-upgrade-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 138, 88, 0.22), transparent 32%),
+    linear-gradient(135deg, #fff, #fff7ef);
+  box-shadow: 0 18px 34px rgba(73, 45, 91, 0.08);
+}
+
+.free-upgrade-kicker {
+  display: block;
+  margin-bottom: 10px;
+  color: #ff7a4d;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.free-upgrade-banner h2 {
+  margin: 0 0 10px;
+  color: #2f2140;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.12;
+  font-weight: 850;
+}
+
+.free-upgrade-banner p {
+  margin: 0;
+  max-width: 680px;
+  color: #8f889a;
+  line-height: 1.6;
+}
+
+.free-locked-project {
+  position: relative;
+}
+
+.free-job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.free-job-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 34px rgba(73, 45, 91, 0.08);
+  transition: all 0.3s ease;
+}
+
+.free-job-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.free-job-icon,
+.free-job-link {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.free-job-icon {
+  background: rgba(142, 216, 223, 0.22);
+  color: #4b97a0;
+}
+
+.free-job-card h3 {
+  margin: 0 0 6px;
+  color: #332245;
+  font-size: 1.05rem;
+}
+
+.free-job-card p,
+.free-job-card span {
+  margin: 0;
+  color: #8f889a;
+  line-height: 1.45;
+}
+
+.free-job-card span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.free-job-link {
+  background: #f7f2f1;
+  color: #532563;
+  transition: all 0.3s ease;
+}
+
+.free-job-link:hover {
+  transform: translateY(-2px);
+}
+
+.free-info-grid .dashboard-stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.free-info-grid .dashboard-stat-card svg {
+  margin-bottom: 12px;
+  color: #532563;
+}
+
+.free-info-grid .dashboard-stat-card strong {
+  max-width: 100%;
+  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.free-info-grid .dashboard-stat-card span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.free-locked-card .dashboard-plan-copy svg {
+  color: #ff7a4d;
+}
+
+.dashboard-icon-button:disabled,
+.dashboard-calendar-day-header button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+html.dark .dashboard-tier-badge,
+html.dark .dashboard-locked-chip {
+  background: rgba(255, 122, 0, 0.14);
+  color: #ffb36b;
+}
+
+html.dark .free-upgrade-banner {
+  background:
+    radial-gradient(circle at top right, rgba(255, 122, 0, 0.18), transparent 32%),
+    linear-gradient(135deg, #15151a, #111116);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
+}
+
+html.dark .free-upgrade-banner h2,
+html.dark .free-job-card h3 {
+  color: #f5f5f7;
+}
+
+html.dark .free-upgrade-banner p,
+html.dark .free-job-card p,
+html.dark .free-job-card span {
+  color: #9a9aa5;
+}
+
+html.dark .free-job-card {
+  background: #141419;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
+}
+
+html.dark .free-job-link {
+  background: #1d1d24;
+  color: #ffb36b;
+}
+
+@media (max-width: 1280px) {
+  .free-dashboard-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .free-upgrade-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .free-upgrade-banner .dashboard-primary-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .free-job-card {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .free-job-link {
+    grid-column: 2;
+    width: 100%;
+  }
+}
