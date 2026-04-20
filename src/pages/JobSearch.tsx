@@ -35,6 +35,29 @@ interface ApplyFormState {
   coverLetter: string;
 }
 
+type JobTypeFilter = "All" | "Full-time" | "Contract";
+
+type RoleCategoryFilter =
+  | "All Roles"
+  | "Frontend"
+  | "Backend"
+  | "Full Stack"
+  | "Data"
+  | "DevOps"
+  | "AI/ML";
+
+type PostedFilter = "Any Time" | "Last 24 Hours" | "Last 3 Days" | "Last 7 Days";
+
+type WorkModeFilter = "All" | "Remote" | "On-site";
+
+type SalaryFilter = "Any" | "₹0-5 LPA" | "₹5-10 LPA" | "₹10-20 LPA" | "₹20+ LPA";
+
+type SortOption =
+  | "Most Recent"
+  | "Most Relevant"
+  | "Salary: High to Low"
+  | "Salary: Low to High";
+
 const JOBS_PER_BATCH = 6;
 const DEFAULT_QUERY = "react";
 const DEFAULT_LOCATION = "india";
@@ -600,6 +623,155 @@ const filterMockJobs = (query: string, location: string): Job[] => {
   });
 };
 
+const parsePostedTime = (posted: string): number => {
+  const normalized = normalize(posted);
+  const match = normalized.match(/(\d+)/);
+  const amount = match ? Number(match[1]) : 9999;
+
+  if (normalized.includes("hour")) {
+    return amount;
+  }
+
+  if (normalized.includes("day")) {
+    return amount * 24;
+  }
+
+  return 9999;
+};
+
+const parseSalaryRange = (salary: string): { min: number; max: number } | null => {
+  const numbers = Array.from(salary.matchAll(/(\d+(?:\.\d+)?)/g)).map((match) => Number(match[1]));
+
+  if (!numbers.length) {
+    return null;
+  }
+
+  if (numbers.length === 1) {
+    return { min: numbers[0], max: numbers[0] };
+  }
+
+  return { min: numbers[0], max: numbers[1] };
+};
+
+const getSalaryScore = (salary: string): number => {
+  const parsed = parseSalaryRange(salary);
+  if (!parsed) {
+    return 0;
+  }
+  return (parsed.min + parsed.max) / 2;
+};
+
+const matchesSalaryBand = (salary: string, selectedBand: SalaryFilter): boolean => {
+  if (selectedBand === "Any") {
+    return true;
+  }
+
+  const parsed = parseSalaryRange(salary);
+  if (!parsed) {
+    return false;
+  }
+
+  if (selectedBand === "₹0-5 LPA") {
+    return parsed.min <= 5;
+  }
+
+  if (selectedBand === "₹5-10 LPA") {
+    return parsed.max >= 5 && parsed.min <= 10;
+  }
+
+  if (selectedBand === "₹10-20 LPA") {
+    return parsed.max >= 10 && parsed.min <= 20;
+  }
+
+  return parsed.max >= 20;
+};
+
+const getRoleCategory = (job: Job): Exclude<RoleCategoryFilter, "All Roles"> => {
+  const title = normalize(job.title);
+  const skills = job.skills.map((skill) => normalize(skill));
+  const text = `${title} ${skills.join(" ")}`;
+
+  if (/(devops|sre|platform|kubernetes|terraform|cloud)/.test(text)) {
+    return "DevOps";
+  }
+
+  if (/(ai|ml|machine learning|llm|nlp|rag|transformer|pytorch|tensorflow)/.test(text)) {
+    return "AI/ML";
+  }
+
+  if (/(data scientist|data|analytics|sql|pandas|statistics)/.test(text)) {
+    return "Data";
+  }
+
+  if (/(full stack|mern|next\.js|nestjs)/.test(text)) {
+    return "Full Stack";
+  }
+
+  if (/(backend|node|java|spring|django|api|microservices|golang|go\b)/.test(text)) {
+    return "Backend";
+  }
+
+  return "Frontend";
+};
+
+const matchesPostedFilter = (posted: string, selected: PostedFilter): boolean => {
+  if (selected === "Any Time") {
+    return true;
+  }
+
+  const hours = parsePostedTime(posted);
+  if (selected === "Last 24 Hours") {
+    return hours <= 24;
+  }
+
+  if (selected === "Last 3 Days") {
+    return hours <= 72;
+  }
+
+  return hours <= 168;
+};
+
+const matchesWorkMode = (job: Job, selected: WorkModeFilter): boolean => {
+  if (selected === "All") {
+    return true;
+  }
+
+  const isRemote = job.remote || normalize(job.location).includes("remote");
+  return selected === "Remote" ? isRemote : !isRemote;
+};
+
+const getRelevanceScore = (job: Job, query: string): number => {
+  const tokens = normalize(query)
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (!tokens.length) {
+    return 0;
+  }
+
+  const title = normalize(job.title);
+  const company = normalize(job.company);
+  const description = normalize(job.description);
+  const skillPool = job.skills.map((skill) => normalize(skill));
+
+  return tokens.reduce((score, token) => {
+    let nextScore = score;
+    if (title.includes(token)) {
+      nextScore += 5;
+    }
+    if (company.includes(token)) {
+      nextScore += 3;
+    }
+    if (description.includes(token)) {
+      nextScore += 1;
+    }
+    if (skillPool.some((skill) => skill.includes(token))) {
+      nextScore += 2;
+    }
+    return nextScore;
+  }, 0);
+};
+
 const normalizeAppliedJobs = (data: unknown): string[] => {
   const toId = (value: unknown): string | null => {
     if (typeof value === "string" && value.trim()) {
@@ -935,8 +1107,12 @@ const JobSearch: React.FC = () => {
 
   const [location, setLocation] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const [committedQuery, setCommittedQuery] = useState("");
-  const [committedLocation, setCommittedLocation] = useState("");
+  const [jobTypeFilter, setJobTypeFilter] = useState<JobTypeFilter>("All");
+  const [roleCategoryFilter, setRoleCategoryFilter] = useState<RoleCategoryFilter>("All Roles");
+  const [postedFilter, setPostedFilter] = useState<PostedFilter>("Any Time");
+  const [workModeFilter, setWorkModeFilter] = useState<WorkModeFilter>("All");
+  const [salaryFilter, setSalaryFilter] = useState<SalaryFilter>("Any");
+  const [sortBy, setSortBy] = useState<SortOption>("Most Recent");
   const [hasMoreApi, setHasMoreApi] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -954,17 +1130,92 @@ const JobSearch: React.FC = () => {
 
   const canLoadMore = hasMoreMock || hasMoreApi;
 
-  const totalShown = useMemo(() => jobs.length, [jobs]);
+  const filteredJobs = useMemo(() => {
+    const normalizedQuery = normalize(searchQuery);
+    const normalizedLocation = normalize(location);
+
+    const nextJobs = jobs.filter((job) => {
+      const matchesKeyword =
+        !normalizedQuery ||
+        normalize(job.title).includes(normalizedQuery) ||
+        normalize(job.company).includes(normalizedQuery) ||
+        job.skills.some((skill) => normalize(skill).includes(normalizedQuery));
+
+      const matchesLocation =
+        !normalizedLocation || normalize(job.location).includes(normalizedLocation);
+
+      const matchesType =
+        jobTypeFilter === "All" || normalize(job.type) === normalize(jobTypeFilter);
+
+      const matchesRole =
+        roleCategoryFilter === "All Roles" || getRoleCategory(job) === roleCategoryFilter;
+
+      const matchesPosted = matchesPostedFilter(job.posted, postedFilter);
+
+      const matchesMode = matchesWorkMode(job, workModeFilter);
+
+      const matchesSalary = matchesSalaryBand(job.salary, salaryFilter);
+
+      return (
+        matchesKeyword &&
+        matchesLocation &&
+        matchesType &&
+        matchesRole &&
+        matchesPosted &&
+        matchesMode &&
+        matchesSalary
+      );
+    });
+
+    const withIndex = nextJobs.map((job, index) => ({ job, index }));
+
+    withIndex.sort((a, b) => {
+      if (sortBy === "Salary: High to Low") {
+        return getSalaryScore(b.job.salary) - getSalaryScore(a.job.salary);
+      }
+
+      if (sortBy === "Salary: Low to High") {
+        return getSalaryScore(a.job.salary) - getSalaryScore(b.job.salary);
+      }
+
+      if (sortBy === "Most Relevant") {
+        const scoreDiff =
+          getRelevanceScore(b.job, searchQuery) - getRelevanceScore(a.job, searchQuery);
+        if (scoreDiff !== 0) {
+          return scoreDiff;
+        }
+      }
+
+      const postedDiff = parsePostedTime(a.job.posted) - parsePostedTime(b.job.posted);
+      if (postedDiff !== 0) {
+        return postedDiff;
+      }
+
+      return a.index - b.index;
+    });
+
+    return withIndex.map((entry) => entry.job);
+  }, [
+    jobs,
+    searchQuery,
+    location,
+    jobTypeFilter,
+    roleCategoryFilter,
+    postedFilter,
+    workModeFilter,
+    salaryFilter,
+    sortBy,
+  ]);
+
+  const totalShown = filteredJobs.length;
 
   const setInitialMockFeed = () => {
-    const initial = MOCK_JOBS.slice(0, JOBS_PER_BATCH);
+    const initial = MOCK_JOBS;
     setJobs(initial);
     setMockIndex(initial.length);
-    setHasMoreMock(initial.length < MOCK_JOBS.length);
+    setHasMoreMock(false);
     setApiPage(1);
     setHasMoreApi(true);
-    setCommittedQuery("");
-    setCommittedLocation("");
     setErrorMessage("");
   };
 
@@ -1073,41 +1324,9 @@ const JobSearch: React.FC = () => {
   const mergeJobs = (existing: Job[], incoming: Job[]) =>
     dedupeJobs([...existing, ...incoming]);
 
-  const handleSearch = async () => {
-    const nextQuery = searchQuery.trim();
-    const nextLocation = location.trim();
-
-    if (!nextQuery && !nextLocation) {
-      setInitialMockFeed();
-      return;
-    }
-
-    setCommittedQuery(nextQuery);
-    setCommittedLocation(nextLocation);
+  const handleSearch = (event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
     setErrorMessage("");
-    setLoading(true);
-
-    const filteredMocks = filterMockJobs(nextQuery, nextLocation);
-    setJobs(filteredMocks);
-    setMockIndex(filteredMocks.length);
-    setHasMoreMock(filteredMocks.length < MOCK_JOBS.length);
-    setApiPage(1);
-    setHasMoreApi(true);
-    try {
-      const apiJobs = await fetchApiJobs(nextQuery, nextLocation, 1);
-      setJobs(mergeJobs(filteredMocks, apiJobs));
-      setApiPage(2);
-      setHasMoreApi(apiJobs.length > 0);
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Unable to search jobs from API.",
-      );
-      setHasMoreApi(false);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleLoadMore = async () => {
@@ -1115,10 +1334,7 @@ const JobSearch: React.FC = () => {
       return;
     }
 
-    const currentMockPool =
-      committedQuery || committedLocation
-        ? filterMockJobs(committedQuery, committedLocation)
-        : MOCK_JOBS;
+    const currentMockPool = MOCK_JOBS;
 
     if (hasMoreMock) {
       const nextChunk = currentMockPool.slice(
@@ -1144,8 +1360,8 @@ const JobSearch: React.FC = () => {
 
     try {
       const apiJobs = await fetchApiJobs(
-        committedQuery,
-        committedLocation,
+        DEFAULT_QUERY,
+        DEFAULT_LOCATION,
         apiPage,
       );
       if (!apiJobs.length) {
@@ -1255,6 +1471,24 @@ const JobSearch: React.FC = () => {
 
   const isJobApplied = (jobId: string) => appliedJobs.includes(jobId);
 
+  useEffect(() => {
+    const currentScroll = window.scrollY;
+    const rafId = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: currentScroll, left: 0, behavior: "auto" });
+    });
+
+    return () => window.cancelAnimationFrame(rafId);
+  }, [
+    searchQuery,
+    location,
+    jobTypeFilter,
+    roleCategoryFilter,
+    postedFilter,
+    workModeFilter,
+    salaryFilter,
+    sortBy,
+  ]);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -1272,7 +1506,7 @@ const JobSearch: React.FC = () => {
       </div>
 
       <div className="tucf-card">
-        <div className="flex flex-col md:flex-row gap-4">
+        <form className="flex flex-col md:flex-row gap-4" onSubmit={handleSearch}>
           <div className="flex-1 relative">
             <Search
               className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5"
@@ -1300,38 +1534,24 @@ const JobSearch: React.FC = () => {
             />
           </div>
           <button
-            onClick={() => setShowFilters(!showFilters)}
+            type="button"
+            onClick={() => setShowFilters((previous) => !previous)}
             className="px-6 py-3 tucf-btn-ghost flex items-center space-x-2"
           >
             <Filter className="h-5 w-5" />
             <span>Filters</span>
           </button>
           <button
+            type="submit"
             className="px-8 py-3 tucf-btn-primary font-medium"
-            onClick={handleSearch}
           >
             Search Jobs
           </button>
-        </div>
+        </form>
 
         {showFilters && (
           <div className="mt-6 rounded-lg border border-gray-200 bg-gray-100 p-4 dark:border-gray-700 dark:bg-gray-800">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label
-                  className="block text-sm font-medium mb-2"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  Experience
-                </label>
-                <select className="w-full px-3 py-2">
-                  <option>Any</option>
-                  <option>0-1 years</option>
-                  <option>1-3 years</option>
-                  <option>3-5 years</option>
-                  <option>5+ years</option>
-                </select>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -1339,28 +1559,84 @@ const JobSearch: React.FC = () => {
                 >
                   Job Type
                 </label>
-                <select className="w-full px-3 py-2">
+                <select
+                  className="w-full px-3 py-2"
+                  value={jobTypeFilter}
+                  onChange={(event) =>
+                    setJobTypeFilter(event.target.value as JobTypeFilter)
+                  }
+                >
                   <option>All</option>
                   <option>Full-time</option>
-                  <option>Part-time</option>
                   <option>Contract</option>
-                  <option>Internship</option>
                 </select>
               </div>
+
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
                   style={{ color: "var(--text-secondary)" }}
                 >
-                  Remote
+                  Role Category
                 </label>
-                <select className="w-full px-3 py-2">
+                <select
+                  className="w-full px-3 py-2"
+                  value={roleCategoryFilter}
+                  onChange={(event) =>
+                    setRoleCategoryFilter(event.target.value as RoleCategoryFilter)
+                  }
+                >
+                  <option>All Roles</option>
+                  <option>Frontend</option>
+                  <option>Backend</option>
+                  <option>Full Stack</option>
+                  <option>Data</option>
+                  <option>DevOps</option>
+                  <option>AI/ML</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Posted Within
+                </label>
+                <select
+                  className="w-full px-3 py-2"
+                  value={postedFilter}
+                  onChange={(event) =>
+                    setPostedFilter(event.target.value as PostedFilter)
+                  }
+                >
+                  <option>Any Time</option>
+                  <option>Last 24 Hours</option>
+                  <option>Last 3 Days</option>
+                  <option>Last 7 Days</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Work Mode
+                </label>
+                <select
+                  className="w-full px-3 py-2"
+                  value={workModeFilter}
+                  onChange={(event) =>
+                    setWorkModeFilter(event.target.value as WorkModeFilter)
+                  }
+                >
                   <option>All</option>
                   <option>Remote</option>
-                  <option>Hybrid</option>
                   <option>On-site</option>
                 </select>
               </div>
+
               <div>
                 <label
                   className="block text-sm font-medium mb-2"
@@ -1368,7 +1644,13 @@ const JobSearch: React.FC = () => {
                 >
                   Salary Range
                 </label>
-                <select className="w-full px-3 py-2">
+                <select
+                  className="w-full px-3 py-2"
+                  value={salaryFilter}
+                  onChange={(event) =>
+                    setSalaryFilter(event.target.value as SalaryFilter)
+                  }
+                >
                   <option>Any</option>
                   <option>₹0-5 LPA</option>
                   <option>₹5-10 LPA</option>
@@ -1389,7 +1671,11 @@ const JobSearch: React.FC = () => {
           <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
             Sort by:
           </span>
-          <select className="px-3 py-1 text-sm">
+          <select
+            className="px-3 py-1 text-sm"
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value as SortOption)}
+          >
             <option>Most Recent</option>
             <option>Most Relevant</option>
             <option>Salary: High to Low</option>
@@ -1411,7 +1697,13 @@ const JobSearch: React.FC = () => {
       )}
 
       <div className="space-y-4">
-        {jobs.map((job) => (
+        {filteredJobs.length === 0 && (
+          <div className="tucf-card text-center py-10" style={{ color: "var(--text-secondary)" }}>
+            No jobs match your filters.
+          </div>
+        )}
+
+        {filteredJobs.map((job) => (
           <div key={job.id} className="tucf-card">
             <div className="flex items-start justify-between">
               <div className="flex-1">
